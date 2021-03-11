@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Cidade Inteligente</string>
+    <string name="welcome">Bem Vindo!</string>
+    <string name="nota">Notas</string>
+</resources>
