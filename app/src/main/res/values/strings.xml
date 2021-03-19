@@ -1,5 +1,7 @@
 <resources>
-    <string name="app_name">Cidade Inteligente</string>
+    <string name="app_name">Smart City</string>
     <string name="welcome">Welcome!</string>
     <string name="nota">Notes</string>
+    <string name="addNote">Add Note</string>
+    <string name="yes">yes</string>
 </resources>

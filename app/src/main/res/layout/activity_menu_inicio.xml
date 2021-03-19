@@ -8,7 +8,7 @@
     android:background="@color/back">
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/buttonNota"
         android:layout_width="173dp"
         android:layout_height="49dp"
         android:text="@string/nota"
