@@ -28,6 +28,7 @@
         android:layout_margin="16dp"
         android:contentDescription="@string/addNote"
         android:src="@drawable/ic_add"
+        android:backgroundTint="@color/fab"
         tools:ignore="MissingConstraints" />
 
 

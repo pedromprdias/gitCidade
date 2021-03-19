@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -15,7 +16,7 @@ import ipvc.estg.cidadeinteligente.adapter.NoteAdapter
 import ipvc.estg.cidadeinteligente.viewmodel.NoteViewModel
 
 
-class ActivityNotes : AppCompatActivity(){
+class ActivityNotes : AppCompatActivity(),NoteAdapter.OnDeleteClickListener, NoteAdapter.OnUpdateClickListener{
 
     private lateinit var noteViewModel: NoteViewModel
     private val newNoteActivityRequestCode = 1
@@ -25,13 +26,13 @@ class ActivityNotes : AppCompatActivity(){
         setContentView(R.layout.activity_notas)
 
         val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
-        val adapter = NoteAdapter(this)
+        val adapter = NoteAdapter(this, this, this)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         noteViewModel = ViewModelProvider(this).get(NoteViewModel::class.java)
         noteViewModel.allNotes.observe(this, Observer { notes ->
-            notes.let{ adapter.setNotes(it)}
+            notes?.let{ adapter.setNotes(it)}
         })
 
         val fab = findViewById<FloatingActionButton>(R.id.fab)
@@ -41,17 +42,19 @@ class ActivityNotes : AppCompatActivity(){
         }
 
 
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         if(requestCode == newNoteActivityRequestCode && resultCode == Activity.RESULT_OK){
-            data?.getStringExtra(AddNote.EXTRA_REPLY)?.let {
-                val note = Notes(notes = it)
+            val titulo = data?.getStringExtra(AddNote.EXTRA_REPLY_titulo).toString()
+            val nota = data?.getStringExtra(AddNote.EXTRA_REPLY_nota).toString()
+
+            val note = Notes(notes = nota,titulo = titulo)
                 noteViewModel.insert(note)
-            }
+
+
         } else{
             Toast.makeText(
                 applicationContext,
@@ -60,4 +63,12 @@ class ActivityNotes : AppCompatActivity(){
         }
     }
 
+
+    override fun onDeleteClick(id: Int) {
+        noteViewModel.deleteNote(id)
+    }
+
+    override fun onUpdateClick(id: Int, titulo: String, notes: String) {
+        Toast.makeText(this, "$id ,$titulo ,$notes", Toast.LENGTH_SHORT).show()
+    }
 }

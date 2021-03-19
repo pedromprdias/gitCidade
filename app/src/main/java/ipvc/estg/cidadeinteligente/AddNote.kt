@@ -11,21 +11,25 @@ import android.widget.EditText
 class AddNote : AppCompatActivity() {
 
     private lateinit var editNoteView: EditText
+    private lateinit var tituloNoteView: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_note)
 
         editNoteView = findViewById(R.id.add_note)
+        tituloNoteView = findViewById(R.id.titulo_add_note)
 
         val button = findViewById<Button>(R.id.button_add)
         button.setOnClickListener {
             val replyIntent = Intent()
-            if(TextUtils.isEmpty(editNoteView.text)){
-                setResult(Activity.RESULT_OK, replyIntent)
+            if(TextUtils.isEmpty(editNoteView.text) || TextUtils.isEmpty(tituloNoteView.text)){
+                finish()
             } else{
                 val word = editNoteView.text.toString()
-                replyIntent.putExtra(EXTRA_REPLY, word)
+                val title = tituloNoteView.text.toString()
+                replyIntent.putExtra(EXTRA_REPLY_titulo, word)
+                replyIntent.putExtra(EXTRA_REPLY_nota, title)
                 setResult(Activity.RESULT_OK, replyIntent)
             }
             finish()
@@ -33,6 +37,7 @@ class AddNote : AppCompatActivity() {
     }
 
     companion object{
-        const val EXTRA_REPLY = "com.example.android.wordlistsql.REPLY"
+        const val EXTRA_REPLY_titulo = "com.example.android.wordlistsql.REPLY_titulo"
+        const val EXTRA_REPLY_nota = "com.example.android.wordlistsql.REPLY_nota"
     }
 }
