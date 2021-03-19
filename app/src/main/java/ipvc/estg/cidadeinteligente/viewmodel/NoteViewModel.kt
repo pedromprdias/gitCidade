@@ -8,6 +8,7 @@ import ipvc.estg.cidadeinteligente.db.NoteDB
 import ipvc.estg.cidadeinteligente.db.NoteRepository
 import ipvc.estg.cidadeinteligente.entities.Notes
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class NoteViewModel(application: Application) : AndroidViewModel(application) {
@@ -27,10 +28,6 @@ class NoteViewModel(application: Application) : AndroidViewModel(application) {
      */
     fun insert(note: Notes) = viewModelScope.launch(Dispatchers.IO) {
         repository.insert(note)
-    }
-
-    fun deleteNote(id: Int) = viewModelScope.launch(Dispatchers.IO){
-        repository.deleteNote(id)
     }
 
 }

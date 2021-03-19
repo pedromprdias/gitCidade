@@ -1,12 +1,9 @@
 package ipvc.estg.cidadeinteligente
 
 import android.app.Activity
-import android.app.AlertDialog
-import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.ImageButton
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -15,7 +12,6 @@ import ipvc.estg.cidadeinteligente.entities.Notes
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import ipvc.estg.cidadeinteligente.adapter.NoteAdapter
-import ipvc.estg.cidadeinteligente.db.NoteDB
 import ipvc.estg.cidadeinteligente.viewmodel.NoteViewModel
 
 
@@ -63,6 +59,5 @@ class ActivityNotes : AppCompatActivity(){
                 Toast.LENGTH_LONG).show()
         }
     }
-
 
 }

@@ -2,6 +2,7 @@ package ipvc.estg.cidadeinteligente.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.OrientationEventListener
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
@@ -18,8 +19,6 @@ class NoteAdapter internal constructor(context: Context) : RecyclerView.Adapter<
 
     class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val noteItemView: TextView = itemView.findViewById(R.id.note)
-        val deleteButton: ImageButton = itemView.findViewById(R.id.imageDelete)
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
@@ -32,8 +31,6 @@ class NoteAdapter internal constructor(context: Context) : RecyclerView.Adapter<
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
         val current = notes[position]
         holder.noteItemView.text = current.notes
-
-
     }
 
     internal fun setNotes(notes: List<Notes>){
