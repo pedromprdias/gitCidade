@@ -9,7 +9,7 @@
     tools:context=".AddNote">
 
     <EditText
-        android:id="@+id/titulo_add_note"
+        android:id="@+id/add_note"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-light"
@@ -17,7 +17,7 @@
         android:textSize="18sp"/>
 
     <EditText
-        android:id="@+id/add_note"
+        android:id="@+id/titulo_add_note"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-light"

@@ -5,4 +5,8 @@
     <string name="nota">Notas</string>
     <string name="addNote">Adicionar Nota</string>
     <string name="yes">sim</string>
+    <string name="title">Introduza titulo</string>
+    <string name="save">Guardar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="edit">Editar</string>
 </resources>

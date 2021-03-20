@@ -4,4 +4,8 @@
     <string name="nota">Notes</string>
     <string name="addNote">Add Note</string>
     <string name="yes">yes</string>
+    <string name="title">Add Title</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="edit">Edit</string>
 </resources>
