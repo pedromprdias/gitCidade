@@ -2,6 +2,7 @@ package ipvc.estg.cidadeinteligente
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -70,15 +71,37 @@ class ActivityNotes : AppCompatActivity(),NoteAdapter.OnDeleteClickListener, Not
 
 
     override fun onDeleteClick(id: Int) {
-        noteViewModel.deleteNote(id)
+        val yes: String = getString(R.string.yes)
+        val no: String = getString(R.string.no)
+        val title: String = getString(R.string.title)
+        val dia:String = getString(R.string.confirm)
+
+        val builder = AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(dia)
+
+        builder.setPositiveButton(yes,DialogInterface.OnClickListener { dialog, with ->
+            noteViewModel.deleteNote(id)
+            dialog.cancel()
+        })
+
+        builder.setNegativeButton(no, DialogInterface.OnClickListener { dialog, with ->
+            dialog.cancel()
+        })
+
+        val alert = builder.create()
+        alert.show()
+
     }
 
     override fun onUpdateClick(id: Int, titulo: String, notes: String) {
+        val title: String = getString(R.string.edit)
 
         val mDialogView = LayoutInflater.from(this).inflate(R.layout.alert_edit, null)
 
         val mBuiler = AlertDialog.Builder(this)
                 .setView(mDialogView)
+                .setTitle(title)
 
         mDialogView.titulo_edit.setText(titulo)
         mDialogView.nota_edit.setText(notes)

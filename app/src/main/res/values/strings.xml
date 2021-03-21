@@ -3,9 +3,12 @@
     <string name="welcome">Welcome!</string>
     <string name="nota">Notes</string>
     <string name="addNote">Add Note</string>
-    <string name="yes">yes</string>
+    <string name="yes">Yes</string>
     <string name="title">Add Title</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
-    <string name="edit">Edit</string>
+    <string name="edit">Edit Note</string>
+    <string name="no">No</string>
+    <string name="delNote">Delete Note</string>
+    <string name="confirm">Are you sure you want to delete this note?</string>
 </resources>
