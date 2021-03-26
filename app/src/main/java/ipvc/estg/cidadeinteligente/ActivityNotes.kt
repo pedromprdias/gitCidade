@@ -6,6 +6,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.widget.EditText
 import android.widget.TextView
@@ -61,11 +62,6 @@ class ActivityNotes : AppCompatActivity(),NoteAdapter.OnDeleteClickListener, Not
                 noteViewModel.insert(note)
 
 
-        } else{
-            Toast.makeText(
-                applicationContext,
-                "Nota nao inserida",
-                Toast.LENGTH_LONG).show()
         }
     }
 
@@ -109,12 +105,21 @@ class ActivityNotes : AppCompatActivity(),NoteAdapter.OnDeleteClickListener, Not
         val mAlertDialog = mBuiler.show()
 
         mDialogView.save.setOnClickListener {
-
-            mAlertDialog.dismiss()
-
             val tituloUpdated = mDialogView.titulo_edit.text.toString()
             val notesUpdated = mDialogView.nota_edit.text.toString()
-            noteViewModel.updateNote(id, tituloUpdated, notesUpdated)
+
+            val error:String = getString(R.string.error)
+
+            if(tituloUpdated.length == 0) {
+                mDialogView.titulo_edit.setError(error)
+            }
+            if(notesUpdated.length == 0){
+                mDialogView.nota_edit.setError(error)
+            }
+            if(tituloUpdated.length != 0 && notesUpdated.length != 0){
+                mAlertDialog.dismiss()
+                noteViewModel.updateNote(id, tituloUpdated, notesUpdated)
+            }
         }
 
         mDialogView.cancel.setOnClickListener {
@@ -122,4 +127,5 @@ class ActivityNotes : AppCompatActivity(),NoteAdapter.OnDeleteClickListener, Not
         }
 
     }
+
 }

@@ -75,6 +75,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_marginEnd="46dp"
+        android:textColor="@color/white"
         android:layout_marginRight="46dp"
         android:text="TextView"
         android:textSize="18sp"

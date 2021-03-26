@@ -12,4 +12,5 @@
     <string name="no">Não</string>
     <string name="delNote">Apagar Nota</string>
     <string name="confirm">Pretende apagar esta nota?</string>
+    <string name="error">Campo Vazio</string>
 </resources>
