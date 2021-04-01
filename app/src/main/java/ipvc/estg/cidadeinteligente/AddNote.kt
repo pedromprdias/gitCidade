@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.widget.Button
 import android.widget.EditText
+import kotlinx.android.synthetic.main.alert_edit.view.*
 
 class AddNote : AppCompatActivity() {
 
@@ -23,16 +24,22 @@ class AddNote : AppCompatActivity() {
         val button = findViewById<Button>(R.id.button_add)
         button.setOnClickListener {
             val replyIntent = Intent()
-            if(TextUtils.isEmpty(editNoteView.text) || TextUtils.isEmpty(tituloNoteView.text)){
-                finish()
-            } else{
+            val error:String = getString(R.string.error)
+
+            if(editNoteView.text.length == 0) {
+                editNoteView.setError(error)
+            }
+            if(tituloNoteView.text.length == 0){
+                tituloNoteView.setError(error)
+            }
+            if(tituloNoteView.text.length != 0 && editNoteView.text.length != 0){
                 val word = editNoteView.text.toString()
                 val title = tituloNoteView.text.toString()
                 replyIntent.putExtra(EXTRA_REPLY_titulo, word)
                 replyIntent.putExtra(EXTRA_REPLY_nota, title)
                 setResult(Activity.RESULT_OK, replyIntent)
+                finish()
             }
-            finish()
         }
     }
 
