@@ -13,4 +13,7 @@
     <string name="delNote">Apagar Nota</string>
     <string name="confirm">Pretende apagar esta nota?</string>
     <string name="error">Campo Vazio</string>
+    <string name="login">login</string>
+    <string name="pass">Palavra-Passe</string>
+    <string name="user">Nome Utilizador</string>
 </resources>
