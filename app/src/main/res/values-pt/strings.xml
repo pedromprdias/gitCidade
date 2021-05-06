@@ -16,4 +16,12 @@
     <string name="login">login</string>
     <string name="pass">Palavra-Passe</string>
     <string name="user">Nome Utilizador</string>
+    <string name="title_activity_maps">Mapa</string>
+    <string name="LoginPre">Lembrar Login</string>
+    <string name="construction">Obras</string>
+    <string name="crash">Acidente</string>
+    <string name="other">Outro</string>
+    <string name="addRep">Adicionar Situação</string>
+    <string name="photo">Tirar Fotografia</string>
+    <string name="desc">Descrição</string>
 </resources>

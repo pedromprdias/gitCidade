@@ -1,8 +1,11 @@
 package ipvc.estg.cidadeinteligente
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -21,6 +24,8 @@ class MenuInicio : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu_inicio)
+
+        loginCheck()
 
         fun sha256(input: String) = hashString("SHA-256", input)
         val intent = Intent(this, MapsActivity::class.java)
@@ -46,6 +51,7 @@ class MenuInicio : AppCompatActivity() {
             }
             if(usernameText.length()!=0 && passwordText.length()!=0){
                 val passEnc = passwordText.text.toString()
+                val user = usernameText.text.toString()
                 val request = ServiceBuilder.buildService(EndPoints::class.java)
                 val passRes = sha256(passEnc)
                 val call = request.userLogin(usernameText.text.toString(), passRes)
@@ -53,9 +59,33 @@ class MenuInicio : AppCompatActivity() {
                 call.enqueue(object : Callback<User> {
                     override fun onResponse(call: Call<User>, response: Response<User>) {
                         if (response.isSuccessful) {
-                            startActivity(intent)
-                            finish()
-                        }
+                            if (response.errorBody() != null) {
+                                Toast.makeText(this@MenuInicio, "Erro", Toast.LENGTH_SHORT).show()
+                            }
+                            else{
+
+                                var sharedPreferences: SharedPreferences = getSharedPreferences("pref",Context.MODE_PRIVATE)
+                                    with(sharedPreferences.edit()){
+                                        putString("userPref",user)
+                                        commit()
+                                    }
+                                if(findViewById<CheckBox>(R.id.check).isChecked) {
+                                    var sharedPreferences: SharedPreferences = getSharedPreferences("pref",Context.MODE_PRIVATE)
+                                    with(sharedPreferences.edit()){
+                                        putBoolean("autoLogin",true)
+                                        commit()
+                                    }
+                                }else{
+                                    var sharedPreferences: SharedPreferences = getSharedPreferences("pref",Context.MODE_PRIVATE)
+                                    with(sharedPreferences.edit()){
+                                        putBoolean("autoLogin",false)
+                                        commit()
+                                    }
+                                }
+                                }
+                                    startActivity(intent)
+                                    finish()
+                            }
                     }
 
                     override fun onFailure(call: Call<User>, t: Throwable) {
@@ -66,6 +96,7 @@ class MenuInicio : AppCompatActivity() {
                 })
             }
         }
+
     }
 
     private fun hashString(type: String, input: String): String {
@@ -82,6 +113,22 @@ class MenuInicio : AppCompatActivity() {
         }
 
         return result.toString()
+    }
+
+    private fun loginCheck(){
+        var sharedPreferences: SharedPreferences = getSharedPreferences("pref",Context.MODE_PRIVATE)
+
+        val check = sharedPreferences.getBoolean("autoLogin", false)
+
+        if(check.equals(true)){
+            val intent = Intent(this, MapsActivity::class.java)
+            startActivity(intent)
+        }
+
+    }
+
+    override fun onBackPressed() {
+
     }
 
 }

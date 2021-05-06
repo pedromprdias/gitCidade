@@ -1,7 +1,17 @@
 package ipvc.estg.cidadeinteligente
 
+import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
+import android.content.pm.PackageManager
+import android.location.Location
+import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import com.google.android.gms.location.*
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -9,10 +19,21 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.android.synthetic.main.activity_maps.*
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
+    private var LOCATION_PERMISSION_REQUEST_CODE = 1
     private lateinit var mMap: GoogleMap
+
+    private lateinit var lastLocation: Location
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+
+    private lateinit var locationCallBack: LocationCallback
+    private lateinit var locationRequest: LocationRequest
+
+    private var clicked = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,6 +42,74 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
                 .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        val sharedPreferences = getSharedPreferences("pref", Context.MODE_PRIVATE)
+
+        var idd = sharedPreferences.getString("userPref","defaultName")
+
+        idUser.setText(idd)
+
+        val intent = Intent(this, AddReport::class.java)
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
+        locationCallBack = object : LocationCallback(){
+            override fun onLocationResult(p0: LocationResult) {
+                super.onLocationResult(p0)
+                lastLocation = p0.lastLocation
+                var loc = LatLng(lastLocation.latitude, lastLocation.longitude)
+                val lngInt = lastLocation.longitude
+                val latInt = lastLocation.latitude
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(loc,15.0f))
+
+                addReport.setOnClickListener {
+                    intent.putExtra("lng",lngInt.toString())
+                    intent.putExtra("lat",latInt.toString())
+                    startActivity(intent)
+                }
+
+            }
+        }
+
+        createLocationRequest()
+
+        val menuFab = findViewById<FloatingActionButton>(R.id.menuMap)
+
+        menuFab.setOnClickListener {
+            onAddButtonClicked()
+        }
+
+        idLogout.setOnClickListener {
+            var sharedPreferences: SharedPreferences = getSharedPreferences("pref",Context.MODE_PRIVATE)
+                with(sharedPreferences.edit()){
+                    putString("userPref",null)
+                    putBoolean("autoLogin",false)
+                    commit()
+                }
+            val intent = Intent(this, MenuInicio::class.java)
+            startActivity(intent)
+        }
+
+    }
+
+    private fun onAddButtonClicked() {
+        setVisibility(clicked)
+        clicked = !clicked
+    }
+
+    private fun setVisibility(clicked:Boolean) {
+        if (!clicked){
+            addReport.visibility = View.VISIBLE
+            idLogout.visibility = View.VISIBLE
+
+        }else{
+            addReport.visibility = View.INVISIBLE
+            idLogout.visibility = View.INVISIBLE
+        }
+    }
+
+    override fun onBackPressed() {
+
     }
 
     /**
@@ -35,9 +124,56 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
-        // Add a marker in Sydney and move the camera
-        val sydney = LatLng(-34.0, 151.0)
-        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+        //setUpMap()
+    }
+
+    fun setUpMap(){
+        if(ActivityCompat.checkSelfPermission(this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+
+            ActivityCompat.requestPermissions(this,
+            arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION) , LOCATION_PERMISSION_REQUEST_CODE)
+
+            return
+        }else{
+            mMap.isMyLocationEnabled = true
+
+            fusedLocationClient.lastLocation.addOnSuccessListener(this) {location ->
+
+                if(location!=null){
+                    lastLocation=location
+                    val currentLatLng = LatLng(location.latitude, location.longitude)
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 12f))
+                }
+            }
+        }
+    }
+
+    private fun startLocationUpdates(){
+        if(ActivityCompat.checkSelfPermission(this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this,
+                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
+                LOCATION_PERMISSION_REQUEST_CODE)
+            return
+        }
+        fusedLocationClient.requestLocationUpdates(locationRequest,locationCallBack,null)
+    }
+
+    private fun createLocationRequest(){
+        locationRequest = LocationRequest()
+
+        locationRequest.interval = 10000
+        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+    }
+
+    override fun onPause() {
+        super.onPause()
+        fusedLocationClient.removeLocationUpdates(locationCallBack)
+    }
+
+    public override fun onResume() {
+        super.onResume()
+        startLocationUpdates()
     }
 }
