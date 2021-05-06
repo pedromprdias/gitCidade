@@ -16,4 +16,17 @@
     <string name="pass">Password</string>
     <string name="user">Username</string>
     <string name="title_activity_maps">Map</string>
+    <string name="LoginPre">Remember Login</string>
+    <string name="construction">Construction</string>
+    <string name="crash">Accident</string>
+    <string name="other">Other</string>
+    
+    <string-array name="types">
+        <item>@string/construction</item>
+        <item>@string/crash</item>
+        <item>@string/other</item>
+    </string-array>
+    <string name="addRep">Add Report</string>
+    <string name="photo">Take Photo</string>
+    <string name="desc">Description</string>
 </resources>
