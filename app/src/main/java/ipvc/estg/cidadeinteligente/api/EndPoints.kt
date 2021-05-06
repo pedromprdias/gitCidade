@@ -14,9 +14,9 @@ interface EndPoints {
     fun getAuthById(@Path("id")id: Int):Call<User>
 
     @FormUrlEncoded
-    @POST("api/auth/new")
-    fun userLogin(@Field("username") username :String,
-                  @Field("password") password: String): Call<User>
+    @POST("api/auth")
+    fun userLogin(@Field("username") username: String?,
+                  @Field("password") password: String?): Call<User>
 
     @Multipart
     @POST("api/report/new")
