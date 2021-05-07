@@ -10,8 +10,8 @@ interface EndPoints {
     @GET("api/report/")
     fun getReports():Call<List<ReportOutpost>>
 
-    @GET("/auth/{id}")
-    fun getAuthById(@Path("id")id: Int):Call<User>
+    @GET("api/report/{id}")
+    fun getreportById(@Path("id")id: Int):Call<ReportOutpost>
 
     @FormUrlEncoded
     @POST("api/auth")
@@ -27,4 +27,14 @@ interface EndPoints {
                   @Part("description")description: RequestBody,
                   @Part photo_name: MultipartBody.Part,
                   @Part("type")type: RequestBody): Call<ReportOutpost>
+
+    @FormUrlEncoded
+    @POST("api/deleteReport")
+    fun deleteReport(@Field("id")id:Int):Call<ReportOutpost>
+
+    @FormUrlEncoded
+    @POST("api/editReport")
+    fun editReport(@Field("id")id:Int,
+                   @Field("title")title:String,
+                   @Field("description")description:String):Call<ReportOutpost>
 }

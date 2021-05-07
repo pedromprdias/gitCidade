@@ -28,4 +28,7 @@
     <string name="lat">Latitude</string>
     <string name="lng">Longitude</string>
     <string name="current">Obter Localizao atual</string>
+    <string name="editR">Editar</string>
+    <string name="deleteR">Apagar</string>
+    <string name="infoR">O Marker foi apagado</string>
 </resources>

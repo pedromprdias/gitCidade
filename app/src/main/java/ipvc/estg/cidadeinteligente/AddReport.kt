@@ -89,7 +89,8 @@ class AddReport : AppCompatActivity() {
             }
             if (descricaoReport.text.length == 0){
                 descricaoReport.setError(error)
-            }else{
+            }
+            if(latEdit.text.length != 0 && lngEdit.text.length != 0 && titleReport.text.length != 0 && descricaoReport.text.length != 0){
 
                 val imgBitMap: Bitmap = findViewById<ImageView>(R.id.imageTaken).drawable.toBitmap()
                 val imageFile: File = convertBitmapToFile("file",imgBitMap)

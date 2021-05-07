@@ -27,7 +27,6 @@ class MenuInicio : AppCompatActivity() {
 
         loginCheck()
 
-        fun sha256(input: String) = hashString("SHA-256", input)
         val intent = Intent(this, MapsActivity::class.java)
 
         val error:String = getString(R.string.error)

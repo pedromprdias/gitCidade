@@ -33,4 +33,7 @@
     <string name="lat">Latitude</string>
     <string name="lng">Longitude</string>
     <string name="current">Get Current Location</string>
+    <string name="editR">Edit</string>
+    <string name="deleteR">Delete</string>
+    <string name="infoR">The Marker was deleted</string>
 </resources>

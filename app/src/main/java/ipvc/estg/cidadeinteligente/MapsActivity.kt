@@ -1,6 +1,7 @@
 package ipvc.estg.cidadeinteligente
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -44,6 +45,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private var clicked = false
 
     private lateinit var reports: List<ReportOutpost>
+
+    val markerID: HashMap<Marker, Int> = HashMap()
+    lateinit var marker: Marker
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -110,7 +114,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     reports = response.body()!!
                     for (report in reports) {
                         position = LatLng(report.lat, report.lng)
-                        mMap.addMarker(MarkerOptions().position(position).title(report.title))
+                        marker = mMap.addMarker(MarkerOptions().position(position).title(report.title))
+
+                        markerID.put(marker, report.id)
                     }
                 }
             }
@@ -156,9 +162,44 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap = googleMap
 
         mMap.setOnInfoWindowClickListener{
-            val intent = Intent(this@MapsActivity, InfoMarker::class.java)
-            intent.putExtra("titleInt","a")
-            startActivity(intent)
+            val request = ServiceBuilder.buildService(EndPoints::class.java)
+            val call = request.getreportById(markerID[it]!!)
+
+            call.enqueue(object : Callback<ReportOutpost> {
+                override fun onResponse(call: Call<ReportOutpost>, response: Response<ReportOutpost>) {
+                    if(response.isSuccessful) {
+                        val point = response.body()!!
+
+                        val edi:String=getString(R.string.editR)
+                        val del:String=getString(R.string.deleteR)
+                        val info:String=getString(R.string.infoR)
+
+                        val alertDialogBuilder = AlertDialog.Builder(this@MapsActivity)
+
+                        alertDialogBuilder.setNeutralButton(edi) { dialog, which ->
+                            val intent = Intent(this@MapsActivity, InfoMarker::class.java)
+                            intent.putExtra("id", markerID[it]!!)
+                            intent.putExtra("titleInt", point.title)
+                            intent.putExtra("titleInt", point.description)
+                            startActivity(intent)
+                        }
+
+                        alertDialogBuilder.setNegativeButton(del){ dialog, which ->
+                            deletePoint(point.id)
+                            Toast.makeText(applicationContext, info, Toast.LENGTH_SHORT).show()
+                            mMap.clear()
+                            getPoints()
+                        }
+
+                        alertDialogBuilder.show()
+                    }
+                }
+
+                override fun onFailure(call: Call<ReportOutpost>, t: Throwable) {
+                    Toast.makeText(this@MapsActivity, "${t.message}", Toast.LENGTH_SHORT).show()
+                }
+
+            })
         }
         //setUpMap()
     }
@@ -229,5 +270,49 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         override fun getInfoWindow(p0: Marker?): View? {
             return null
         }
+    }
+
+    fun deletePoint(id: Int){
+        val request = ServiceBuilder.buildService(EndPoints::class.java)
+        val call = request.deleteReport(id)
+
+        call.enqueue(object: Callback<ReportOutpost>{
+            override fun onFailure(call: Call<ReportOutpost>, t: Throwable) {
+                Toast.makeText(this@MapsActivity, "${t.message}", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onResponse(call: Call<ReportOutpost>, response: Response<ReportOutpost>) {
+                getPoints()
+            }
+        })
+
+    }
+
+    fun getPoints(){
+
+        val request = ServiceBuilder.buildService(EndPoints::class.java)
+
+        val call = request.getReports()
+
+        var position: LatLng
+
+        call.enqueue(object: Callback<List<ReportOutpost>>{
+            override fun onResponse(call: Call<List<ReportOutpost>>, response: Response<List<ReportOutpost>>) {
+                if (response.isSuccessful) {
+                    reports = response.body()!!
+                    for (report in reports) {
+                        position = LatLng(report.lat, report.lng)
+                        marker = mMap.addMarker(MarkerOptions().position(position).title(report.title))
+
+                        markerID.put(marker, report.id)
+                    }
+                    }
+                }
+
+            override fun onFailure(call: Call<List<ReportOutpost>>, t: Throwable) {
+                //Toast.makeText(this@MapsActivity, "${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
+
     }
 }
