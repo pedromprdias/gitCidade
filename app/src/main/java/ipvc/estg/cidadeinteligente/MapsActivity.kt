@@ -1,5 +1,6 @@
 package ipvc.estg.cidadeinteligente
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -18,9 +19,17 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import ipvc.estg.cidadeinteligente.api.EndPoints
+import ipvc.estg.cidadeinteligente.api.ReportOutpost
+import ipvc.estg.cidadeinteligente.api.ServiceBuilder
 import kotlinx.android.synthetic.main.activity_maps.*
+import kotlinx.android.synthetic.main.info_window.view.*
+import retrofit2.Call
+import retrofit2.Response
+import retrofit2.Callback
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -34,6 +43,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var locationRequest: LocationRequest
 
     private var clicked = false
+
+    private lateinit var reports: List<ReportOutpost>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,7 +71,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 var loc = LatLng(lastLocation.latitude, lastLocation.longitude)
                 val lngInt = lastLocation.longitude
                 val latInt = lastLocation.latitude
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(loc,15.0f))
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(loc,16.0f))
 
                 addReport.setOnClickListener {
                     intent.putExtra("lng",lngInt.toString())
@@ -89,6 +100,31 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             val intent = Intent(this, MenuInicio::class.java)
             startActivity(intent)
         }
+
+        val request = ServiceBuilder.buildService(EndPoints::class.java)
+        val call = request.getReports()
+        var position: LatLng
+
+        call.enqueue(object : Callback<List<ReportOutpost>> {
+            override fun onResponse(call: Call<List<ReportOutpost>>, response: Response<List<ReportOutpost>>) {
+                if (response.isSuccessful) {
+                    reports = response.body()!!
+                    for (report in reports) {
+                        position = LatLng(report.lat, report.lng)
+                        mMap.addMarker(MarkerOptions().position(position).title(report.title))
+
+                        mMap.setOnInfoWindowClickListener {
+
+                        }
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<List<ReportOutpost>>, t: Throwable) {
+                Toast.makeText(this@MapsActivity, "${t.message}", Toast.LENGTH_SHORT).show()
+            }
+
+        })
 
     }
 
@@ -175,5 +211,23 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     public override fun onResume() {
         super.onResume()
         startLocationUpdates()
+    }
+
+    class CustomInfoWindowGoogleMap(val context: Context) : GoogleMap.InfoWindowAdapter {
+
+        override fun getInfoContents(p0: Marker?): View {
+
+            var mInfoView = (context as Activity).layoutInflater.inflate(R.layout.info_window, null)
+            var mInfoWindow: ReportOutpost? = p0?.tag as ReportOutpost?
+
+            mInfoView.titleInfo.text = mInfoWindow?.title
+            mInfoView.infoDesc.text = mInfoWindow?.description
+
+            return mInfoView
+        }
+
+        override fun getInfoWindow(p0: Marker?): View? {
+            return null
+        }
     }
 }

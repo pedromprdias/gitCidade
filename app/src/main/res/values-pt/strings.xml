@@ -24,4 +24,8 @@
     <string name="addRep">Adicionar Situação</string>
     <string name="photo">Tirar Fotografia</string>
     <string name="desc">Descrição</string>
+    <string name="titleR">Titulo</string>
+    <string name="lat">Latitude</string>
+    <string name="lng">Longitude</string>
+    <string name="current">Obter Localizao atual</string>
 </resources>
