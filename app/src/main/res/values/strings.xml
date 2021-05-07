@@ -36,4 +36,6 @@
     <string name="editR">Edit</string>
     <string name="deleteR">Delete</string>
     <string name="infoR">The Marker was deleted</string>
+    <string name="editReport">Edit Report</string>
+    <string name="cancelR">Cancel</string>
 </resources>

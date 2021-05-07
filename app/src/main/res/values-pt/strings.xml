@@ -31,4 +31,6 @@
     <string name="editR">Editar</string>
     <string name="deleteR">Apagar</string>
     <string name="infoR">O Marker foi apagado</string>
+    <string name="editReport">Editar Report</string>
+    <string name="cancelR">Cancelar</string>
 </resources>

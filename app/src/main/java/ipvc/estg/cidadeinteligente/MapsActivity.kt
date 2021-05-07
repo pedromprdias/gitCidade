@@ -61,8 +61,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         var idd = sharedPreferences.getString("userPref","defaultName")
 
-        idUser.setText(idd)
-
         val intent = Intent(this, AddReport::class.java)
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
@@ -91,6 +89,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         menuFab.setOnClickListener {
             onAddButtonClicked()
+        }
+
+        idNotasMap.setOnClickListener {
+            val intent = Intent(this, ActivityNotes::class.java)
+            startActivity(intent)
         }
 
         idLogout.setOnClickListener {
@@ -138,10 +141,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         if (!clicked){
             addReport.visibility = View.VISIBLE
             idLogout.visibility = View.VISIBLE
+            idNotasMap.visibility= View.VISIBLE
 
         }else{
             addReport.visibility = View.INVISIBLE
             idLogout.visibility = View.INVISIBLE
+            idNotasMap.visibility= View.INVISIBLE
         }
     }
 
@@ -180,7 +185,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                             val intent = Intent(this@MapsActivity, InfoMarker::class.java)
                             intent.putExtra("id", markerID[it]!!)
                             intent.putExtra("titleInt", point.title)
-                            intent.putExtra("titleInt", point.description)
+                            intent.putExtra("descInt", point.description)
                             startActivity(intent)
                         }
 

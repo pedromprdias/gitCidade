@@ -111,7 +111,7 @@ class AddReport : AppCompatActivity() {
                     override fun onResponse(call: Call<ReportOutpost>, response: Response<ReportOutpost>) {
                         if (response.isSuccessful) {
                             if (response.errorBody() != null) {
-                                Toast.makeText(this@AddReport, "Erro", Toast.LENGTH_SHORT).show()
+
                             }else {
                                 val intent = Intent(this@AddReport, MapsActivity::class.java)
                                 startActivity(intent)

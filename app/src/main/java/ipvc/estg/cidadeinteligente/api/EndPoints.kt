@@ -35,6 +35,6 @@ interface EndPoints {
     @FormUrlEncoded
     @POST("api/editReport")
     fun editReport(@Field("id")id:Int,
-                   @Field("title")title:String,
-                   @Field("description")description:String):Call<ReportOutpost>
+                   @Field("title")title:String?,
+                   @Field("description")description:String?):Call<ReportOutpost>
 }
