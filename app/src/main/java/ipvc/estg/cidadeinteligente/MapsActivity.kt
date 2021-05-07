@@ -18,6 +18,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
@@ -91,9 +92,40 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             onAddButtonClicked()
         }
 
+        idSearch.setOnClickListener {
+            mMap.clear()
+
+            val cancel:String = getString(R.string.cancelR)
+            val tipo:String = getString(R.string.selection)
+            val crash:String = getString(R.string.crash)
+            val construction:String = getString(R.string.construction)
+            val san:String = getString(R.string.san)
+            val other:String = getString(R.string.other)
+
+            val dialog = AlertDialog.Builder(this)
+            val bNames = arrayOf<CharSequence>(construction,crash, san, other)
+            dialog.setTitle(tipo)
+            dialog.setItems(bNames) { _, which ->
+                when (which) {
+                    0 -> filterConstruction()
+                    1 -> filterCrash()
+                    2 -> filterSan()
+                    3 -> filterOther()
+                }
+            }.create()
+
+            dialog.setNegativeButton(cancel) { _, _ ->
+            }
+            dialog.show()
+        }
+
         idNotasMap.setOnClickListener {
             val intent = Intent(this, ActivityNotes::class.java)
             startActivity(intent)
+        }
+
+        idRefresh.setOnClickListener {
+            refresh()
         }
 
         idLogout.setOnClickListener {
@@ -132,6 +164,143 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     }
 
+    private fun refresh(){
+        val request = ServiceBuilder.buildService(EndPoints::class.java)
+        val call = request.getReports()
+        var position: LatLng
+
+        call.enqueue(object : Callback<List<ReportOutpost>> {
+            override fun onResponse(call: Call<List<ReportOutpost>>, response: Response<List<ReportOutpost>>) {
+                if (response.isSuccessful) {
+                    reports = response.body()!!
+                    for (report in reports) {
+                        position = LatLng(report.lat, report.lng)
+                        marker = mMap.addMarker(MarkerOptions().position(position).title(report.title))
+
+                        markerID.put(marker, report.id)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<List<ReportOutpost>>, t: Throwable) {
+                Toast.makeText(this@MapsActivity, "${t.message}", Toast.LENGTH_SHORT).show()
+            }
+
+        })
+    }
+
+    private fun filterConstruction() {
+        val request = ServiceBuilder.buildService(EndPoints::class.java)
+        var position: LatLng
+        var call = request.filterCons()
+
+
+        call.enqueue(object: Callback<List<ReportOutpost>>{
+            override fun onResponse(call: Call<List<ReportOutpost>>, response: Response<List<ReportOutpost>>) {
+                if (response.isSuccessful) {
+                    reports = response.body()!!
+                    for (address in reports) {
+                        position = LatLng(
+                                address.lat.toDouble(),
+                                address.lng.toDouble()
+                        )
+                        mMap.addMarker(MarkerOptions().position(position).title(address.title)).setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<List<ReportOutpost>>, t: Throwable) {
+                Toast.makeText(this@MapsActivity, "${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
+
+    }
+
+    private fun filterCrash() {
+        val request = ServiceBuilder.buildService(EndPoints::class.java)
+        var position: LatLng
+        var call = request.filterAcc()
+
+
+        call.enqueue(object: Callback<List<ReportOutpost>>{
+            override fun onResponse(call: Call<List<ReportOutpost>>, response: Response<List<ReportOutpost>>) {
+                if (response.isSuccessful) {
+                    reports = response.body()!!
+                    for (address in reports) {
+                        position = LatLng(
+                                address.lat.toDouble(),
+                                address.lng.toDouble()
+                        )
+                        mMap.addMarker(MarkerOptions().position(position).title(address.title)).setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<List<ReportOutpost>>, t: Throwable) {
+                Toast.makeText(this@MapsActivity, "${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
+
+    }
+
+    private fun filterSan() {
+        val request = ServiceBuilder.buildService(EndPoints::class.java)
+        var position: LatLng
+        var call = request.filterSan()
+
+
+        call.enqueue(object: Callback<List<ReportOutpost>>{
+            override fun onResponse(call: Call<List<ReportOutpost>>, response: Response<List<ReportOutpost>>) {
+                if (response.isSuccessful) {
+                    reports = response.body()!!
+                    for (address in reports) {
+                        position = LatLng(
+                                address.lat.toDouble(),
+                                address.lng.toDouble()
+                        )
+                        mMap.addMarker(MarkerOptions().position(position).title(address.title)).setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<List<ReportOutpost>>, t: Throwable) {
+                Toast.makeText(this@MapsActivity, "${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
+
+    }
+
+    private fun filterOther() {
+        val request = ServiceBuilder.buildService(EndPoints::class.java)
+        var position: LatLng
+        var call = request.filterOther()
+
+
+        call.enqueue(object: Callback<List<ReportOutpost>>{
+            override fun onResponse(call: Call<List<ReportOutpost>>, response: Response<List<ReportOutpost>>) {
+                if (response.isSuccessful) {
+                    reports = response.body()!!
+                    for (address in reports) {
+                        position = LatLng(
+                                address.lat.toDouble(),
+                                address.lng.toDouble()
+                        )
+                        mMap.addMarker(MarkerOptions().position(position).title(address.title)).setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<List<ReportOutpost>>, t: Throwable) {
+                Toast.makeText(this@MapsActivity, "${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
+
+    }
+
     private fun onAddButtonClicked() {
         setVisibility(clicked)
         clicked = !clicked
@@ -141,12 +310,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         if (!clicked){
             addReport.visibility = View.VISIBLE
             idLogout.visibility = View.VISIBLE
-            idNotasMap.visibility= View.VISIBLE
+            idNotasMap.visibility = View.VISIBLE
+            idSearch.visibility = View.VISIBLE
 
         }else{
             addReport.visibility = View.INVISIBLE
             idLogout.visibility = View.INVISIBLE
             idNotasMap.visibility= View.INVISIBLE
+            idSearch.visibility = View.INVISIBLE
         }
     }
 

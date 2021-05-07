@@ -13,6 +13,18 @@ interface EndPoints {
     @GET("api/report/{id}")
     fun getreportById(@Path("id")id: Int):Call<ReportOutpost>
 
+    @GET("api/report/construction")
+    fun filterCons():Call<List<ReportOutpost>>
+
+    @GET("api/report/accident")
+    fun filterAcc():Call<List<ReportOutpost>>
+
+    @GET("api/report/sanitation")
+    fun filterSan():Call<List<ReportOutpost>>
+
+    @GET("api/report/other")
+    fun filterOther():Call<List<ReportOutpost>>
+
     @FormUrlEncoded
     @POST("api/auth")
     fun userLogin(@Field("username") username: String?,
@@ -37,4 +49,5 @@ interface EndPoints {
     fun editReport(@Field("id")id:Int,
                    @Field("title")title:String?,
                    @Field("description")description:String?):Call<ReportOutpost>
+
 }

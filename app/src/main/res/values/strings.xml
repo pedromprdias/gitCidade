@@ -24,6 +24,7 @@
     <string-array name="types">
         <item>@string/construction</item>
         <item>@string/crash</item>
+        <item>@string/san</item>
         <item>@string/other</item>
     </string-array>
     <string name="addRep">Add Report</string>
@@ -38,4 +39,6 @@
     <string name="infoR">The Marker was deleted</string>
     <string name="editReport">Edit Report</string>
     <string name="cancelR">Cancel</string>
+    <string name="san">Sanitation</string>
+    <string name="selection">Select the type</string>
 </resources>
