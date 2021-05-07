@@ -33,4 +33,6 @@
     <string name="infoR">O Marker foi apagado</string>
     <string name="editReport">Editar Report</string>
     <string name="cancelR">Cancelar</string>
+    <string name="san">Saneamento</string>
+    <string name="selection">Selecionar o tipo</string>
 </resources>
