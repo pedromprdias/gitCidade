@@ -32,12 +32,12 @@
         android:id="@+id/addReport"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="8dp"
         android:backgroundTint="@color/fab"
         android:clickable="true"
         android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/idLogout"
-        app:layout_constraintEnd_toEndOf="@+id/idLogout"
+        app:layout_constraintBottom_toTopOf="@+id/idNotasMap"
+        app:layout_constraintEnd_toEndOf="@+id/idNotasMap"
         app:srcCompat="@drawable/ic_add"
         tools:ignore="VectorDrawableCompat" />
 
@@ -54,16 +54,18 @@
         app:srcCompat="@drawable/ic_logout"
         tools:ignore="VectorDrawableCompat" />
 
-    <TextView
-        android:id="@+id/idUser"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/idNotasMap"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="116dp"
-        android:text="TextView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/map" />
+        android:layout_marginBottom="12dp"
+        android:visibility="invisible"
+        android:clickable="true"
+        android:backgroundTint="@color/fab"
+        app:layout_constraintBottom_toTopOf="@+id/idLogout"
+        app:layout_constraintEnd_toEndOf="@+id/idLogout"
+        app:srcCompat="@drawable/ic_noteap"
+        tools:ignore="VectorDrawableCompat" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

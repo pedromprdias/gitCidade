@@ -27,7 +27,6 @@ class MenuInicio : AppCompatActivity() {
 
         loginCheck()
 
-        fun sha256(input: String) = hashString("SHA-256", input)
         val intent = Intent(this, MapsActivity::class.java)
 
         val error:String = getString(R.string.error)
@@ -53,39 +52,38 @@ class MenuInicio : AppCompatActivity() {
                 val passEnc = passwordText.text.toString()
                 val user = usernameText.text.toString()
                 val request = ServiceBuilder.buildService(EndPoints::class.java)
-                val passRes = sha256(passEnc)
-                val call = request.userLogin(usernameText.text.toString(), passRes)
+                val call = request.userLogin(usernameText.text.toString(), passEnc)
 
                 call.enqueue(object : Callback<User> {
                     override fun onResponse(call: Call<User>, response: Response<User>) {
                         if (response.isSuccessful) {
-                            if (response.errorBody() != null) {
-                                Toast.makeText(this@MenuInicio, "Erro", Toast.LENGTH_SHORT).show()
-                            }
-                            else{
+                            if (response.body()?.status!!) {
 
-                                var sharedPreferences: SharedPreferences = getSharedPreferences("pref",Context.MODE_PRIVATE)
-                                    with(sharedPreferences.edit()){
-                                        putString("userPref",user)
-                                        commit()
-                                    }
-                                if(findViewById<CheckBox>(R.id.check).isChecked) {
-                                    var sharedPreferences: SharedPreferences = getSharedPreferences("pref",Context.MODE_PRIVATE)
-                                    with(sharedPreferences.edit()){
-                                        putBoolean("autoLogin",true)
-                                        commit()
-                                    }
-                                }else{
-                                    var sharedPreferences: SharedPreferences = getSharedPreferences("pref",Context.MODE_PRIVATE)
-                                    with(sharedPreferences.edit()){
-                                        putBoolean("autoLogin",false)
-                                        commit()
-                                    }
+                                var sharedPreferences: SharedPreferences = getSharedPreferences("pref", Context.MODE_PRIVATE)
+                                with(sharedPreferences.edit()) {
+                                    putString("userPref", user)
+                                    commit()
                                 }
+                                if (findViewById<CheckBox>(R.id.check).isChecked) {
+                                    var sharedPreferences: SharedPreferences = getSharedPreferences("pref", Context.MODE_PRIVATE)
+                                    with(sharedPreferences.edit()) {
+                                        putBoolean("autoLogin", true)
+                                        commit()
+                                    }
+                                } else {
+                                    var sharedPreferences: SharedPreferences = getSharedPreferences("pref", Context.MODE_PRIVATE)
+                                    with(sharedPreferences.edit()) {
+                                        putBoolean("autoLogin", false)
+                                        commit()
+                                    }
+
                                 }
-                                    startActivity(intent)
-                                    finish()
+                                startActivity(intent)
+                                finish()
+                            } else {
+                                Toast.makeText(this@MenuInicio, "erro", Toast.LENGTH_SHORT).show()
                             }
+                        }
                     }
 
                     override fun onFailure(call: Call<User>, t: Throwable) {

@@ -7,23 +7,34 @@ import retrofit2.Call
 import retrofit2.http.*
 
 interface EndPoints {
-    @GET("/auth/")
-    fun getAuth():Call<List<User>>
+    @GET("api/report/")
+    fun getReports():Call<List<ReportOutpost>>
 
-    @GET("/auth/{id}")
-    fun getAuthById(@Path("id")id: Int):Call<User>
+    @GET("api/report/{id}")
+    fun getreportById(@Path("id")id: Int):Call<ReportOutpost>
 
     @FormUrlEncoded
-    @POST("api/auth/new")
-    fun userLogin(@Field("username") username :String,
-                  @Field("password") password: String): Call<User>
+    @POST("api/auth")
+    fun userLogin(@Field("username") username: String?,
+                  @Field("password") password: String?): Call<User>
 
     @Multipart
     @POST("api/report/new")
-    fun addReport(@Part("user_name") user_name:RequestBody,
+    fun addReport(@Part("title") title:RequestBody,
+                  @Part("user_name") user_name:RequestBody,
                   @Part("lat")lat: RequestBody,
                   @Part("lng")lng: RequestBody,
                   @Part("description")description: RequestBody,
                   @Part photo_name: MultipartBody.Part,
                   @Part("type")type: RequestBody): Call<ReportOutpost>
+
+    @FormUrlEncoded
+    @POST("api/deleteReport")
+    fun deleteReport(@Field("id")id:Int):Call<ReportOutpost>
+
+    @FormUrlEncoded
+    @POST("api/editReport")
+    fun editReport(@Field("id")id:Int,
+                   @Field("title")title:String?,
+                   @Field("description")description:String?):Call<ReportOutpost>
 }

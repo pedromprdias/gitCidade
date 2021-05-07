@@ -5,11 +5,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AddReport">
+    
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="443dp"
+        android:layout_height="300dp"
         android:gravity="center_horizontal"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -26,35 +34,65 @@
 
         <ImageView
             android:id="@+id/imageTaken"
-            android:layout_width="240dp"
-            android:layout_height="240dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:scaleType="centerCrop"
             android:layout_gravity="center"
             android:src="@drawable/ic_image" />
 
 
+
+        <Button
+            android:id="@+id/takeP"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="40dp"
+            android:text="@string/photo" />
+
+
+        <EditText
+            android:id="@+id/titleReport"
+            android:layout_width="347dp"
+            android:layout_height="46dp"
+            android:hint="@string/titleR"
+            android:layout_marginBottom="40dp"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/descricaoReport"
+            android:layout_width="347dp"
+            android:layout_height="46dp"
+            android:hint="@string/desc"
+            android:layout_marginBottom="40dp"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/latEdit"
+            android:layout_width="347dp"
+            android:layout_height="46dp"
+            android:hint="@string/lat"
+            android:layout_marginBottom="40dp"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/lngEdit"
+            android:layout_width="347dp"
+            android:layout_height="46dp"
+            android:hint="@string/lng"
+            android:layout_marginBottom="40dp"
+            android:inputType="text" />
+
+        <Button
+            android:id="@+id/getCurrent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="100dp"
+            android:text="@string/current" />
+
     </LinearLayout>
 
-    <EditText
-        android:id="@+id/descricaoReport"
-        android:layout_width="347dp"
-        android:layout_height="46dp"
-        android:layout_marginBottom="24dp"
-        android:inputType="text"
-        android:hint="@string/desc"
-        app:layout_constraintBottom_toTopOf="@+id/takeP"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
-        android:id="@+id/takeP"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="90dp"
-        android:text="@string/photo"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+    </ScrollView>
 
     <Button
         android:id="@+id/addReport"

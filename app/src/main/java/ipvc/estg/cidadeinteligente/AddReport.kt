@@ -72,32 +72,49 @@ class AddReport : AppCompatActivity() {
             }
         }
 
+        getCurrent.setOnClickListener {
+            latEdit.setText(latPassed.toString())
+            lngEdit.setText(lngPassed.toString())
+        }
+
         addReport.setOnClickListener {
+            if(latEdit.text.length == 0){
+                latEdit.setError(error)
+            }
+            if(lngEdit.text.length == 0){
+                lngEdit.setError(error)
+            }
+            if(titleReport.text.length == 0){
+                titleReport.setError(error)
+            }
             if (descricaoReport.text.length == 0){
                 descricaoReport.setError(error)
-            }else{
+            }
+            if(latEdit.text.length != 0 && lngEdit.text.length != 0 && titleReport.text.length != 0 && descricaoReport.text.length != 0){
 
                 val imgBitMap: Bitmap = findViewById<ImageView>(R.id.imageTaken).drawable.toBitmap()
                 val imageFile: File = convertBitmapToFile("file",imgBitMap)
                 val imgFileRequest: RequestBody = RequestBody.create(MediaType.parse("image/"),imageFile)
                 val photo_name: MultipartBody.Part = MultipartBody.Part.createFormData("photo_name",imageFile.name,imgFileRequest)
 
+                val title : RequestBody = RequestBody.create(MediaType.parse("multipart/form-data"),titleReport.text.toString())
                 val user_name: RequestBody = RequestBody.create(MediaType.parse("multipart/form-data"),userName)
-                val lat: RequestBody = RequestBody.create(MediaType.parse("multipart/form-data"),latPassed.toString())
-                val lng: RequestBody = RequestBody.create(MediaType.parse("multipart/form-data"),lngPassed.toString())
+                val lat: RequestBody = RequestBody.create(MediaType.parse("multipart/form-data"),latEdit.text.toString())
+                val lng: RequestBody = RequestBody.create(MediaType.parse("multipart/form-data"),lngEdit.text.toString())
                 val description: RequestBody = RequestBody.create(MediaType.parse("multipart/form-data"),descricaoReport.text.toString())
                 val type: RequestBody = RequestBody.create(MediaType.parse("multipart/form-data"),spinner.selectedItem.toString())
 
                 val request = ServiceBuilder.buildService(EndPoints::class.java)
-                val call = request.addReport(user_name, lat, lng, description,photo_name, type)
+                val call = request.addReport(title,user_name,lat,lng,description,photo_name,type)
 
                 call.enqueue(object : Callback<ReportOutpost> {
                     override fun onResponse(call: Call<ReportOutpost>, response: Response<ReportOutpost>) {
                         if (response.isSuccessful) {
                             if (response.errorBody() != null) {
-                                Toast.makeText(this@AddReport, "Erro", Toast.LENGTH_SHORT).show()
+
                             }else {
-                                Toast.makeText(this@AddReport, response.body()!!.description, Toast.LENGTH_SHORT).show()
+                                val intent = Intent(this@AddReport, MapsActivity::class.java)
+                                startActivity(intent)
                             }
                         }
                     }

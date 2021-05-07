@@ -20,7 +20,7 @@
     <string name="construction">Construction</string>
     <string name="crash">Accident</string>
     <string name="other">Other</string>
-    
+
     <string-array name="types">
         <item>@string/construction</item>
         <item>@string/crash</item>
@@ -29,4 +29,13 @@
     <string name="addRep">Add Report</string>
     <string name="photo">Take Photo</string>
     <string name="desc">Description</string>
+    <string name="titleR">Title</string>
+    <string name="lat">Latitude</string>
+    <string name="lng">Longitude</string>
+    <string name="current">Get Current Location</string>
+    <string name="editR">Edit</string>
+    <string name="deleteR">Delete</string>
+    <string name="infoR">The Marker was deleted</string>
+    <string name="editReport">Edit Report</string>
+    <string name="cancelR">Cancel</string>
 </resources>
