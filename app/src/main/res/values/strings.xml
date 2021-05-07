@@ -20,7 +20,7 @@
     <string name="construction">Construction</string>
     <string name="crash">Accident</string>
     <string name="other">Other</string>
-    
+
     <string-array name="types">
         <item>@string/construction</item>
         <item>@string/crash</item>

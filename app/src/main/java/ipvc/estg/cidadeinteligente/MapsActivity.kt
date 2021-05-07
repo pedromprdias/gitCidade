@@ -13,7 +13,6 @@ import android.view.View
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.*
-
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -112,10 +111,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     for (report in reports) {
                         position = LatLng(report.lat, report.lng)
                         mMap.addMarker(MarkerOptions().position(position).title(report.title))
-
-                        mMap.setOnInfoWindowClickListener {
-
-                        }
                     }
                 }
             }
@@ -160,6 +155,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
+        mMap.setOnInfoWindowClickListener{
+            val intent = Intent(this@MapsActivity, InfoMarker::class.java)
+            intent.putExtra("titleInt","a")
+            startActivity(intent)
+        }
         //setUpMap()
     }
 
